@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../config/hooks";
 import { clearAdminProducts, getAdminProducts } from "../../actions/products";
-import { clearAdminPrices, getAdminPrices } from "../../actions/prices";
+import { clearprices, getprices } from "../../actions/prices";
+import AdminProduct from "./AdminProduct";
 
 function AdminDashboard(): JSX.Element {
   const [selectedTab, setTab] = useState<number>(0);
@@ -15,12 +16,7 @@ function AdminDashboard(): JSX.Element {
         <section>
           {Array.isArray(adminProducts) &&
             adminProducts.map((product) => (
-              <article key={product.id}>
-                <figure>
-                  <img src={product.images[0]} />
-                </figure>
-                <h6>{product.name}</h6>
-              </article>
+              <AdminProduct data={product} key={product.id} />
             ))}
         </section>
       </div>
@@ -28,10 +24,10 @@ function AdminDashboard(): JSX.Element {
   };
   useEffect(() => {
     dispatch(getAdminProducts());
-    dispatch(getAdminPrices());
+    dispatch(getprices());
     () => {
       dispatch(clearAdminProducts());
-      dispatch(clearAdminPrices());
+      dispatch(clearprices());
     };
   }, [dispatch]);
   const content = contentOptions[selectedTab];

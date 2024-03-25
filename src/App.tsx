@@ -3,12 +3,13 @@ import { Provider } from "react-redux";
 
 import store from "./store";
 
+import AdminDashboard from "./components/AdminDashboard";
+import CreateProductPage from "./components/CreateProductPage";
 import ErrorPage from "./components/ErrorPage";
 import HomePage from "./components/HomePage";
 import LoginPage from "./components/LoginPage";
 
 import "./App.css";
-import AdminDashboard from "./components/AdminDashboard";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <AdminDashboard />,
+  },
+  {
+    path: "/createproduct",
+    element: <CreateProductPage />,
   },
 ]);
 

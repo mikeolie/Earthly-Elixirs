@@ -1,17 +1,17 @@
 
 import { type ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { REDUX_STATES, StripePrice } from "../@types";
-import { clearAdminPrices, getAdminPrices } from "../actions/prices";
+import { clearprices, getprices } from "../actions/prices";
 
 interface PRODUCTS_INITIAL_STATE {
-  adminPrices: StripePrice[];
+  prices: StripePrice[];
   status: REDUX_STATES;
   error: null;
   dashboardPrices: StripePrice[];
 }
 
 const initialState: PRODUCTS_INITIAL_STATE = {
-  adminPrices: [],
+  prices: [],
   dashboardPrices: [],
   status: REDUX_STATES.IDLE,
   error: null,
@@ -22,14 +22,14 @@ const pricesSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder: ActionReducerMapBuilder<PRODUCTS_INITIAL_STATE>) {
-    builder.addCase(getAdminPrices.fulfilled, (state, action) => {
-      state.adminPrices = action.payload.prices;
+    builder.addCase(getprices.fulfilled, (state, action) => {
+      state.prices = action.payload.prices;
       state.status = REDUX_STATES.SUCCEEDED;
       state.error = null;
       return state;
     });
-		builder.addCase(clearAdminPrices.fulfilled, (state) => {
-			state.adminPrices = []
+		builder.addCase(clearprices.fulfilled, (state) => {
+			state.prices = []
 			state.status = REDUX_STATES.IDLE;
 			state.error = null;
 			return state;

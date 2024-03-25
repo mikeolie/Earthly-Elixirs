@@ -55,3 +55,21 @@ export enum REDUX_STATES {
   FAILURE = "FAILURE",
   IDLE = "IDLE",
 }
+
+export enum PRODUCT_CATEGORY {
+  TOPICALS = "topicals",
+  GUMMIES = "gummies",
+  TINCTURES = "tinctures",
+  OILS = "oils",
+  CAPSULES = "capsules",
+}
+
+export interface ProductFormData {
+  productName: string;
+  unitAmount: number;
+  recurring: boolean;
+  images: string[];
+  imagesToUpload: File[];
+  category: string;
+  description: string;
+}
