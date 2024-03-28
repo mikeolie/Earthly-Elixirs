@@ -552,6 +552,10 @@ video {
   display: none;
 }
 
+.flex-auto {
+  flex: 1 1 auto;
+}
+
 .flex-row {
   flex-direction: row;
 }

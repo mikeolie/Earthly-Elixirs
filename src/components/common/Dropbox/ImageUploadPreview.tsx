@@ -15,7 +15,7 @@ function ImageUploadPreview({
     <figure
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="image-upload-thumbnail__container"
+      className="flex flex-col"
     >
       {isHovered && (
         <span
@@ -25,11 +25,7 @@ function ImageUploadPreview({
           X
         </span>
       )}
-      <img
-        className="image-upload__thumbnail"
-        src={image.src}
-        alt={image.id.toString()}
-      />
+      <img style={{ width: "10%" }} src={image.src} alt={image.id.toString()} />
       <figcaption className="image-upload__caption">
         {image.file.name} - {image.file.size} bytes
       </figcaption>

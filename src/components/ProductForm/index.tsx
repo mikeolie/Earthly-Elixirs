@@ -19,11 +19,15 @@ interface ProductFormProps {
     key: keyof ProductFormData,
     value: string | ImageState[]
   ) => void;
+  updateImagesToUpload: React.Dispatch<React.SetStateAction<ImageState[]>>;
+  imagesToUpload: ImageState[];
 }
 
 function ProductForm({
   data,
   handleFormUpdate,
+  imagesToUpload,
+  updateImagesToUpload,
 }: ProductFormProps): JSX.Element {
   const [formattedUnitAmount, setFormattedUnitAmount] = useState<string>(
     data.unitAmount.toString()
@@ -42,9 +46,6 @@ function ProductForm({
   };
   const updateCategory = (e: SelectChangeEvent): void => {
     handleFormUpdate("category", e.target.value);
-  };
-  const handleUpdateImages = (images: ImageState[]): void => {
-    handleFormUpdate("images", images);
   };
   const categoryOptions = PRODUCT_CATEGORIES.map((category) => (
     <MenuItem key={category} value={category}>
@@ -85,7 +86,10 @@ function ProductForm({
         </Select>
       </article>
       <article>
-        <ImageUploader handleUpdateImages={handleUpdateImages} />
+        <ImageUploader
+          imagesToUpload={imagesToUpload}
+          handleUpdateImages={updateImagesToUpload}
+        />
       </article>
     </form>
   );

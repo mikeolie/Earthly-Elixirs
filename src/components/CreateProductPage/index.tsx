@@ -8,6 +8,7 @@ import DefaultSnackbar from "../common/DefaultSnackbar";
 import {
   CreateProductInput,
   DefaultAxiosResponse,
+  ImageState,
   ProductFormData,
   SNACKBAR_STATUSES,
 } from "../../@types";
@@ -19,7 +20,9 @@ import { CREATE_PRODUCT, createProduct } from "../../actions/products";
 function CreateProductPage(): JSX.Element {
   const [formData, updateFormData] =
     useState<ProductFormData>(INITIAL_PRODUCT_FORM);
+  const [imagesToUpload, updateImagesToUpload] = useState<ImageState[]>([]);
   const [isSnackbarOpen, toggleSnackbar] = useState<boolean>(false);
+  const [isLoading, toggleLoading] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<SNACKBAR_STATUSES>(
     SNACKBAR_STATUSES.INFO
@@ -39,13 +42,12 @@ function CreateProductPage(): JSX.Element {
     updateFormData(copyOfState);
   };
   const handleCreateProduct = async (): Promise<void> => {
-    const uploadedImages = (await uploadFilesToAws(
-      formData.imagesToUpload
-    )) as never;
+    toggleLoading(true)
+    const uploadedImages = (await uploadFilesToAws(imagesToUpload)) as never;
     const resolvedFiles = await Promise.all(uploadedImages);
     const createProductInput: CreateProductInput = {
       productName: formData.productName,
-      unitAmount: formData.unitAmount,
+      unitAmount: parseInt(formData.unitAmount.toString(), 10),
       images: resolvedFiles,
       recurring: false,
       category: formData.category,
@@ -54,6 +56,7 @@ function CreateProductPage(): JSX.Element {
     const response: DefaultAxiosResponse = await dispatch(
       createProduct(createProductInput)
     );
+    toggleLoading(false)
     if (response.type !== `${CREATE_PRODUCT}/fulfilled`) {
       showSnackbar(
         "Unable to create product, please contact Mike",
@@ -63,25 +66,31 @@ function CreateProductPage(): JSX.Element {
     }
     showSnackbar("Successfully created product", SNACKBAR_STATUSES.SUCCESS);
     updateFormData(INITIAL_PRODUCT_FORM);
+    updateImagesToUpload([])
   };
   const handleCreateProductClick = (): void => {
     void handleCreateProduct().then().catch();
   };
   const isReady =
     formData.productName.length > 2 &&
-    formData.unitAmount > 0 &&
+    parseInt(formData.unitAmount.toString(), 10) > 0 &&
     formData.category !== "" &&
-    formData.imagesToUpload.length > 0;
+    imagesToUpload.length > 0;
   return (
     <div>
       <nav></nav>
-      <main>
+      <main className="flex flex-col">
         <header>Create Product</header>
-        <ProductForm data={formData} handleFormUpdate={handleFormUpdate} />
+        <ProductForm
+          data={formData}
+          handleFormUpdate={handleFormUpdate}
+          imagesToUpload={imagesToUpload}
+          updateImagesToUpload={updateImagesToUpload}
+        />
         <Button
           onClick={handleCreateProductClick}
           variant="contained"
-          disabled={!isReady}
+          disabled={!isReady || isLoading}
           color="success"
         >
           Create Product
