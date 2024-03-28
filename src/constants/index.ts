@@ -21,3 +21,15 @@ export const INITIAL_PRODUCT_FORM: ProductFormData = {
   recurring: false,
   category: "",
 };
+
+
+export const imageTypes = [
+  'image/jpeg',
+  'image/png',
+  'image/vnd.microsoft.icon',
+  'image/vnd.djvu',
+  'image/vnd.wap.wbmp',
+  'image/x-xbitmap',
+  'image/x-xpixmap',
+  'image/x-xwindowdump',
+];

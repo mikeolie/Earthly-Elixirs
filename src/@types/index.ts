@@ -73,3 +73,32 @@ export interface ProductFormData {
   category: string;
   description: string;
 }
+
+export interface CreateProductInput {
+  productName: string;
+  unitAmount: number;
+  recurring: boolean;
+  images: string[];
+  category: string;
+  description: string;
+}
+
+export enum SNACKBAR_STATUSES {
+  "ERROR" = "error",
+  "SUCCESS" = "success",
+  "WARNING" = "warning",
+  "INFO" = "info",
+}
+
+interface DefaultAxiosResponseMeta {
+  arg: unknown;
+  requestId: string;
+  requestStatus: string;
+}
+
+export interface DefaultAxiosResponse {
+  error?: unknown;
+  meta: DefaultAxiosResponseMeta;
+  payload: unknown;
+  type: string;
+}

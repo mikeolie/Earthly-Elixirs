@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
+import AdminProduct from "./AdminProduct";
+
 import { useAppDispatch, useAppSelector } from "../../config/hooks";
 import { clearAdminProducts, getAdminProducts } from "../../actions/products";
-import { clearprices, getprices } from "../../actions/prices";
-import AdminProduct from "./AdminProduct";
+import { clearPrices, getPrices } from "../../actions/prices";
 
 function AdminDashboard(): JSX.Element {
   const [selectedTab, setTab] = useState<number>(0);
@@ -24,10 +25,10 @@ function AdminDashboard(): JSX.Element {
   };
   useEffect(() => {
     dispatch(getAdminProducts());
-    dispatch(getprices());
+    dispatch(getPrices());
     () => {
       dispatch(clearAdminProducts());
-      dispatch(clearprices());
+      dispatch(clearPrices());
     };
   }, [dispatch]);
   const content = contentOptions[selectedTab];

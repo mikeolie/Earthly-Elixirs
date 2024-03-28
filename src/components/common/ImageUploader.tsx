@@ -1,50 +1,41 @@
-import React from "react";
-import AWS, { AWSError } from "aws-sdk";
-import { PutObjectOutput } from "aws-sdk/clients/s3";
-import { PromiseResult } from "aws-sdk/lib/request";
+import React, { useState } from "react";
+
+import { imageTypes } from "../../constants";
 
 interface ImageUploaderProps {
-  file: File | undefined;
-  setFile: (file: File) => void;
+  file: File | null;
+  index: number;
+  setFile: (file: File, index: number) => void;
 }
 
-function ImageUploader({ file, setFile }: ImageUploaderProps): JSX.Element {
-  const uploadImage = async (): Promise<void> => {
-    if (file) {
-      const S3_BUCKET = import.meta.env.VITE_S3_BUCKET;
-      const REGION = import.meta.env.VITE_S3_REGION;
-      const s3 = new AWS.S3({
-        params: { Bucket: S3_BUCKET },
-        region: REGION,
-      });
-      const params = {
-        Bucket: S3_BUCKET,
-        Key: file.name,
-        Body: file,
-      };
-      // Uploading file to s3
+const acceptImageTypes = imageTypes.join(",");
 
-      const upload = s3.putObject(params).promise();
-      await upload.then(
-        (value: PromiseResult<PutObjectOutput, AWSError>): void => {
-          console.log(value);
-          // Fille successfully uploaded
-          alert("File uploaded successfully.");
-        }
-      );
-    }
-  };
+function ImageUploader({
+  index,
+  file,
+  setFile,
+}: ImageUploaderProps): JSX.Element {
+  const initialImageURL: string | undefined =
+    file !== null ? URL.createObjectURL(file) : undefined;
+  const [imageURL, setImageURL] = useState<string | undefined>(initialImageURL);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const files = e.currentTarget.files;
     if (files !== null) {
       const file = files[0];
-      setFile(file);
+      setImageURL(URL.createObjectURL(file));
+      setFile(file, index);
     }
   };
   return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-      {file !== undefined && <button onClick={uploadImage}>Upload</button>}
+    <div className="flex justify-center items-center flex-col">
+      {imageURL !== undefined && (
+        <img style={{ width: "10%" }} src={imageURL} />
+      )}
+      <input
+        accept={acceptImageTypes}
+        type="file"
+        onChange={handleFileChange}
+      />
     </div>
   );
 }

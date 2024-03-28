@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Provider } from "react-redux";
 
 import store from "./store";
@@ -10,6 +11,8 @@ import HomePage from "./components/HomePage";
 import LoginPage from "./components/LoginPage";
 
 import "./App.css";
+
+const theme = createTheme({});
 
 const router = createBrowserRouter([
   {
@@ -34,7 +37,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />;
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
     </Provider>
   );
 }

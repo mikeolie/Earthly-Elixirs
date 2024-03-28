@@ -6,7 +6,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 const url = `${baseUrl}/prices`;
 
 export const GET_ADMIN_PRICES = "GET_ADMIN_PRICES";
-export const getprices = createAsyncThunk(
+export const getPrices = createAsyncThunk(
   GET_ADMIN_PRICES,
   async (_, { rejectWithValue }) => {
     try {
@@ -19,7 +19,7 @@ export const getprices = createAsyncThunk(
 );
 
 export const CLEAR_ADMIN_PRICES = "CLEAR_ADMIN_PRICES";
-export const clearprices = createAsyncThunk(
+export const clearPrices = createAsyncThunk(
   CLEAR_ADMIN_PRICES,
   async () => {}
 );
