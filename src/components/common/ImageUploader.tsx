@@ -1,42 +1,60 @@
-import React, { useState } from "react";
+import { useCallback, useState } from "react";
 
-import { imageTypes } from "../../constants";
+import Dropbox from "./Dropbox";
+
+import validateFile from "../../helpers/validateFile";
+import { ImageState } from "../../@types";
 
 interface ImageUploaderProps {
-  file: File | null;
-  index: number;
-  setFile: (file: File, index: number) => void;
+  handleUpdateImages: (images: ImageState[]) => void;
 }
 
-const acceptImageTypes = imageTypes.join(",");
-
 function ImageUploader({
-  index,
-  file,
-  setFile,
+  handleUpdateImages,
 }: ImageUploaderProps): JSX.Element {
-  const initialImageURL: string | undefined =
-    file !== null ? URL.createObjectURL(file) : undefined;
-  const [imageURL, setImageURL] = useState<string | undefined>(initialImageURL);
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const files = e.currentTarget.files;
-    if (files !== null) {
-      const file = files[0];
-      setImageURL(URL.createObjectURL(file));
-      setFile(file, index);
-    }
+  const [images, setImages] = useState<ImageState[]>([]);
+  const removeQueuedImage = (image: ImageState) => {
+    const newArr = images.filter((img) => img.id !== image.id);
+    return setImages(newArr);
   };
+  const handleOnDrop = useCallback((acceptedFiles: Array<File>): void => {
+    acceptedFiles.forEach((file: File, index: number) => {
+      const isFileValid: boolean = validateFile(file);
+      if (!isFileValid) {
+        return null;
+      }
+      const reader = new FileReader();
+  
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        setImages((prevState: ImageState[]) => {
+          const updatedImages = [
+            ...prevState,
+            {
+              file,
+              id: index,
+              src: e.target?.result as string,
+            },
+          ];
+          handleUpdateImages(updatedImages); // Call handleUpdateImages with the updated images array
+          return updatedImages;
+        });
+      };
+  
+      reader.readAsDataURL(file);
+      return file;
+    });
+  }, [handleUpdateImages]);
+
+  const imagesToShow = images.map((img) => <img key={img.id} src={img.src} />);
   return (
-    <div className="flex justify-center items-center flex-col">
-      {imageURL !== undefined && (
-        <img style={{ width: "10%" }} src={imageURL} />
-      )}
-      <input
-        accept={acceptImageTypes}
-        type="file"
-        onChange={handleFileChange}
+    <section>
+      <Dropbox
+        files={images}
+        removeQueuedImage={removeQueuedImage}
+        onDrop={handleOnDrop}
       />
-    </div>
+      {imagesToShow}
+    </section>
   );
 }
 

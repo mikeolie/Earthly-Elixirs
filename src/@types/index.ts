@@ -69,7 +69,7 @@ export interface ProductFormData {
   unitAmount: number;
   recurring: boolean;
   images: string[];
-  imagesToUpload: File[];
+  imagesToUpload: ImageState[];
   category: string;
   description: string;
 }
@@ -101,4 +101,10 @@ export interface DefaultAxiosResponse {
   meta: DefaultAxiosResponseMeta;
   payload: unknown;
   type: string;
+}
+
+export interface ImageState {
+  file: File;
+  id: number;
+  src: string;
 }
