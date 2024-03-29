@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 
 import { NumericFormat } from "react-number-format";
 
-import ImageUploader from "../common/ImageUploader";
+import ImageUploader from "../../common/ImageUploader";
 
 import type { ImageState, ProductFormData } from "../../@types";
 import { PRODUCT_CATEGORIES } from "../../constants";
@@ -30,7 +30,7 @@ function ProductForm({
   updateImagesToUpload,
 }: ProductFormProps): JSX.Element {
   const [formattedUnitAmount, setFormattedUnitAmount] = useState<string>(
-    data.unitAmount.toString()
+    (data.unitAmount / 100).toFixed(2) // Convert from cents to dollars
   );
 
   const updateProductName = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -40,10 +40,12 @@ function ProductForm({
     handleFormUpdate("description", e.target.value);
   };
 
-  const updateUnitAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    handleFormUpdate("unitAmount", e.target.value);
-    setFormattedUnitAmount(e.target.value);
+  const updateUnitAmount = (value: string): void => {
+    const amountInCents = parseFloat(value) * 100; // Convert from dollars to cents
+    handleFormUpdate("unitAmount", amountInCents.toString());
+    setFormattedUnitAmount(value);
   };
+
   const updateCategory = (e: SelectChangeEvent): void => {
     handleFormUpdate("category", e.target.value);
   };
@@ -67,7 +69,10 @@ function ProductForm({
           thousandSeparator=","
           customInput={TextField}
           label="Unit Amount"
-          onChange={updateUnitAmount}
+          onValueChange={(values) => updateUnitAmount(values.value)}
+          allowNegative={false}
+          decimalScale={2}
+          fixedDecimalScale
         />
         <TextField
           onChange={updateDescription}

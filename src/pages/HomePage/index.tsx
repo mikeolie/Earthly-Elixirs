@@ -1,4 +1,4 @@
-import Menu from "../Menu";
+import Menu from "../../components/AdminMenu";
 
 function HomePage(): JSX.Element {
   return (

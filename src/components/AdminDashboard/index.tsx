@@ -5,6 +5,7 @@ import AdminProduct from "./AdminProduct";
 import { useAppDispatch, useAppSelector } from "../../config/hooks";
 import { clearAdminProducts, getAdminProducts } from "../../actions/products";
 import { clearPrices, getPrices } from "../../actions/prices";
+import AdminLayout from "../../layout/AdminLayout";
 
 function AdminDashboard(): JSX.Element {
   const [selectedTab, setTab] = useState<number>(0);
@@ -14,7 +15,7 @@ function AdminDashboard(): JSX.Element {
     0: (
       <div>
         <header>Admin Products</header>
-        <section>
+        <section className="flex flex-wrap justify-center gap-4">
           {Array.isArray(adminProducts) &&
             adminProducts.map((product) => (
               <AdminProduct data={product} key={product.id} />
@@ -32,23 +33,7 @@ function AdminDashboard(): JSX.Element {
     };
   }, [dispatch]);
   const content = contentOptions[selectedTab];
-  return (
-    <div>
-      <menu>
-        <header>Earthly Elixirs</header>
-        <ul>
-          <li
-            onClick={() => {
-              setTab(0);
-            }}
-          >
-            Products
-          </li>
-        </ul>
-      </menu>
-      <main>{content}</main>
-    </div>
-  );
+  return <AdminLayout setTab={setTab}>{content}</AdminLayout>;
 }
 
 export default AdminDashboard;

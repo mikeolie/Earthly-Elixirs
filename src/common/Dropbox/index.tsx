@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 
 import Container from "./StyledDropbox";
 import ImageUploadPreview from "./ImageUploadPreview";
-import { ImageState } from "../../../@types";
+import { ImageState } from "../../@types";
 
 type DROPBOX_PROPS = {
   files: Array<ImageState>;

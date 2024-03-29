@@ -2,7 +2,7 @@ import React from "react";
 import Snackbar, { type SnackbarOrigin } from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-import { type SNACKBAR_STATUSES } from "../../@types";
+import { type SNACKBAR_STATUSES } from "../@types";
 
 interface DefaultSnackbarProps {
   setSnackbar: (bool: boolean) => void;

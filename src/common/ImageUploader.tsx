@@ -2,8 +2,8 @@ import { useCallback } from "react";
 
 import Dropbox from "./Dropbox";
 
-import validateFile from "../../helpers/validateFile";
-import { ImageState } from "../../@types";
+import validateFile from "../helpers/validateFile";
+import { ImageState } from "../@types";
 
 interface ImageUploaderProps {
   handleUpdateImages: React.Dispatch<React.SetStateAction<ImageState[]>>;

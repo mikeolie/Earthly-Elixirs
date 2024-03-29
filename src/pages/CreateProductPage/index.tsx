@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import Button from "@mui/material/Button";
 
-import ProductForm from "../ProductForm";
-import DefaultSnackbar from "../common/DefaultSnackbar";
+import ProductForm from "../../components/ProductForm";
+import DefaultSnackbar from "../../common/DefaultSnackbar";
 
 import {
   CreateProductInput,

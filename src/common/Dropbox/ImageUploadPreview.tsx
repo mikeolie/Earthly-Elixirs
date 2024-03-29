@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ImageState } from "../../../@types";
+import { ImageState } from "../../@types";
 
 interface ImageUploadPreviewProps {
   image: ImageState;

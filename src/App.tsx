@@ -5,10 +5,11 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import AdminDashboard from "./components/AdminDashboard";
-import CreateProductPage from "./components/CreateProductPage";
+import CreateProductPage from "./pages/CreateProductPage";
 import ErrorPage from "./components/ErrorPage";
-import HomePage from "./components/HomePage";
-import LoginPage from "./components/LoginPage";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import PageTitle from "./common/PageTitle";
 
 import "./App.css";
 
@@ -17,20 +18,40 @@ const theme = createTheme({});
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <>
+        <PageTitle title="Earthly Elixirs | Home" />
+        <HomePage />
+      </>
+    ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <>
+        <PageTitle title="Earthly Elixirs | Login Page" />
+        <LoginPage />
+      </>
+    ),
   },
   {
     path: "/dashboard",
-    element: <AdminDashboard />,
+    element: (
+      <>
+        <PageTitle title="Earthly Elixirs | Admin Dashboard" />
+        <AdminDashboard />
+      </>
+    ),
   },
   {
     path: "/createproduct",
-    element: <CreateProductPage />,
+    element: (
+      <>
+        <PageTitle title="Earthly Elixirs | Create Product" />
+        <CreateProductPage />
+      </>
+    ),
   },
 ]);
 
