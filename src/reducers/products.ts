@@ -1,6 +1,10 @@
 import { type ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { REDUX_STATES, StripeProduct } from "../@types";
-import { clearAdminProducts, getAdminProducts } from "../actions/products";
+import {
+  clearAdminProducts,
+  deleteProduct,
+  getAdminProducts,
+} from "../actions/products";
 
 interface PRODUCTS_INITIAL_STATE {
   adminProducts: StripeProduct[];
@@ -27,12 +31,26 @@ const productsSlice = createSlice({
       state.error = null;
       return state;
     });
-		builder.addCase(clearAdminProducts.fulfilled, (state) => {
-			state.adminProducts = []
-			state.status = REDUX_STATES.IDLE;
-			state.error = null;
-			return state;
-		})
+    builder.addCase(clearAdminProducts.fulfilled, (state) => {
+      state.adminProducts = [];
+      state.status = REDUX_STATES.IDLE;
+      state.error = null;
+      return state;
+    });
+    builder.addCase(deleteProduct.fulfilled, (state, action) => {
+      const copyOfState: StripeProduct[] = JSON.parse(
+        JSON.stringify(state.adminProducts)
+      );
+      const productId = action.payload.productId;
+      const productIdx = copyOfState.findIndex(
+        (product) => product.id === productId
+      );
+      if (productIdx > -1) {
+        copyOfState.splice(productIdx, 1);
+      }
+      state.adminProducts = copyOfState;
+      return state;
+    });
   },
 });
 

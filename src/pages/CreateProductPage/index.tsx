@@ -78,7 +78,6 @@ function CreateProductPage(): JSX.Element {
     imagesToUpload.length > 0;
   return (
     <div>
-      <nav></nav>
       <main className="flex flex-col">
         <header>Create Product</header>
         <ProductForm

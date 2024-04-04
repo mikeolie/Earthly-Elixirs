@@ -4,11 +4,12 @@ import { Provider } from "react-redux";
 
 import store from "./store";
 
-import AdminDashboard from "./components/AdminDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import CreateProductPage from "./pages/CreateProductPage";
 import ErrorPage from "./components/ErrorPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import ManageProductPage from "./pages/ManageProductPage";
 import PageTitle from "./common/PageTitle";
 
 import "./App.css";
@@ -50,6 +51,15 @@ const router = createBrowserRouter([
       <>
         <PageTitle title="Earthly Elixirs | Create Product" />
         <CreateProductPage />
+      </>
+    ),
+  },
+  {
+    path: "/manageproduct/:productId",
+    element: (
+      <>
+        <PageTitle title="Earthly Elixirs | Manage Product" />
+        <ManageProductPage />
       </>
     ),
   },

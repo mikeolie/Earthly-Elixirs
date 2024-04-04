@@ -1,6 +1,6 @@
 import React, { useState, ReactNode } from "react";
 
-import Menu from "../components/AdminMenu/index";
+import AdminMenu from "../components/AdminMenu/index";
 import AdminSidebar from "../components/AdminSidebar/index";
 
 const AdminLayout: React.FC<{
@@ -23,7 +23,7 @@ const AdminLayout: React.FC<{
         {/* <!-- ===== Content Area Start ===== --> */}
         <div className="relative flex flex-2 flex-col overflow-y-auto overflow-x-hidden">
           {/* <!-- ===== Menu Start ===== --> */}
-          <Menu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <AdminMenu sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           {/* <!-- ===== Menu End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}

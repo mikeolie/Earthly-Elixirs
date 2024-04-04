@@ -38,7 +38,7 @@ export interface StripeProduct {
   images: string[];
   features: unknown[];
   livemode: false;
-  metadata: Record<string | number, string | number>;
+  metadata: Record<string, string>;
   name: string;
   package_dimensions: null | string;
   shippable: null | string;
@@ -107,4 +107,18 @@ export interface ImageState {
   file: File;
   id: number;
   src: string;
+}
+
+export interface UpdatePriceInput {
+  priceId: string;
+  unitAmount: number;
+}
+
+export interface StripeProductResponse {
+  product: StripeProduct;
+  message: string;
+}
+export interface StripePriceResponse {
+  price: StripePrice;
+  message: string;
 }

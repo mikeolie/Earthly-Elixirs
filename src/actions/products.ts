@@ -37,3 +37,31 @@ export const clearAdminProducts = createAsyncThunk(
   CLEAR_ADMIN_PRODUCTS,
   async () => {}
 );
+
+export const GET_PRODUCT_BY_ID = "GET_PRODUCT_BY_ID";
+export const getProductByID = createAsyncThunk(
+  GET_PRODUCT_BY_ID,
+  async (productId: string, { rejectWithValue }) => {
+    try {
+      const getProductURL = `${url}/${productId}`;
+      const response = await axios.get(getProductURL);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({ data: error });
+    }
+  }
+);
+
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const deleteProduct = createAsyncThunk(
+  DELETE_PRODUCT,
+  async (productId: string, { rejectWithValue }) => {
+    try {
+      const deleteProductURL = `${url}/${productId}`;
+      const response = await axios.delete(deleteProductURL);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({ data: error });
+    }
+  }
+);
