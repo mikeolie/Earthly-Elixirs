@@ -15,7 +15,7 @@ import capitalize from "../../helpers/capitalize";
 
 interface ProductFormProps {
   data: ProductFormData;
-  removeExistingImage: (image: string) => void;
+  removeExistingImage?: (image: string) => void;
   handleFormUpdate: (
     key: keyof ProductFormData,
     value: string | ImageState[]

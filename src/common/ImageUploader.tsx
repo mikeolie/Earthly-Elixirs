@@ -9,7 +9,7 @@ import { ImageState } from "../@types";
 
 interface ImageUploaderProps {
   handleUpdateImages: React.Dispatch<React.SetStateAction<ImageState[]>>;
-  removeExistingImage: (image: string) => void | undefined;
+  removeExistingImage?: (image: string) => void;
   existingImages: string[];
   imagesToUpload: ImageState[];
 }
@@ -52,10 +52,15 @@ function ImageUploader({
 
   const existingImagesToRender = existingImages.map((existingImg) => {
     const handleDeleteImageClick = (): void => {
-      removeExistingImage(existingImg);
+      if (removeExistingImage !== undefined) {
+        removeExistingImage(existingImg);
+      }
     };
     return (
-      <article className="flex gap-4 mb-2 flex-col items-center" key={existingImg}>
+      <article
+        className="flex gap-4 mb-2 flex-col items-center"
+        key={existingImg}
+      >
         <figure className="w-2/6">
           <img src={existingImg} alt="" />
         </figure>
