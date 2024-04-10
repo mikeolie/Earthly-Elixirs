@@ -42,7 +42,7 @@ function CreateProductPage(): JSX.Element {
     updateFormData(copyOfState);
   };
   const handleCreateProduct = async (): Promise<void> => {
-    toggleLoading(true)
+    toggleLoading(true);
     const uploadedImages = (await uploadFilesToAws(imagesToUpload)) as never;
     const resolvedFiles = await Promise.all(uploadedImages);
     const createProductInput: CreateProductInput = {
@@ -56,7 +56,7 @@ function CreateProductPage(): JSX.Element {
     const response: DefaultAxiosResponse = await dispatch(
       createProduct(createProductInput)
     );
-    toggleLoading(false)
+    toggleLoading(false);
     if (response.type !== `${CREATE_PRODUCT}/fulfilled`) {
       showSnackbar(
         "Unable to create product, please contact Mike",
@@ -66,7 +66,7 @@ function CreateProductPage(): JSX.Element {
     }
     showSnackbar("Successfully created product", SNACKBAR_STATUSES.SUCCESS);
     updateFormData(INITIAL_PRODUCT_FORM);
-    updateImagesToUpload([])
+    updateImagesToUpload([]);
   };
   const handleCreateProductClick = (): void => {
     void handleCreateProduct().then().catch();

@@ -2,7 +2,7 @@ import axios, { type AxiosResponse } from "axios";
 
 import baseUrl from "../config/baseUrl";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { CreateProductInput } from "../@types";
+import { CreateProductInput, UpdateProductInput } from "../@types";
 
 const url = `${baseUrl}/products`;
 
@@ -59,6 +59,20 @@ export const deleteProduct = createAsyncThunk(
     try {
       const deleteProductURL = `${url}/${productId}`;
       const response = await axios.delete(deleteProductURL);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue({ data: error });
+    }
+  }
+);
+
+export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
+export const updateProduct = createAsyncThunk(
+  UPDATE_PRODUCT,
+  async (productData: UpdateProductInput, { rejectWithValue }) => {
+    try {
+      const updateProductURL = `${url}`;
+      const response = await axios.put(updateProductURL, productData);
       return response.data;
     } catch (error) {
       return rejectWithValue({ data: error });

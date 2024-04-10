@@ -111,6 +111,7 @@ export interface ImageState {
 
 export interface UpdatePriceInput {
   priceId: string;
+  productId: string;
   unitAmount: number;
 }
 
@@ -121,4 +122,11 @@ export interface StripeProductResponse {
 export interface StripePriceResponse {
   price: StripePrice;
   message: string;
+}
+
+export interface UpdateProductInput {
+  productId: string;
+  productName?: string;
+  category?: string;
+  images?: string[];
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 
@@ -8,7 +8,12 @@ import DefaultSnackbar from "../../common/DefaultSnackbar";
 import ProductForm from "../../components/ProductForm";
 
 import { useAppDispatch } from "../../config/hooks";
-import { GET_PRODUCT_BY_ID, getProductByID } from "../../actions/products";
+import {
+  GET_PRODUCT_BY_ID,
+  UPDATE_PRODUCT,
+  getProductByID,
+  updateProduct,
+} from "../../actions/products";
 import {
   DefaultAxiosResponse,
   ImageState,
@@ -18,8 +23,15 @@ import {
   StripePriceResponse,
   StripeProduct,
   StripeProductResponse,
+  UpdatePriceInput,
+  UpdateProductInput,
 } from "../../@types";
-import { GET_PRICE_BY_ID, getPriceByID } from "../../actions/prices";
+import {
+  GET_PRICE_BY_ID,
+  UPDATE_PRICE,
+  getPriceByID,
+  updatePrice,
+} from "../../actions/prices";
 
 function ManageProductPage(): JSX.Element {
   const [productToUpdate, setProductToUpdate] = useState<StripeProduct>();
@@ -33,14 +45,18 @@ function ManageProductPage(): JSX.Element {
   const [snackbarSeverity, setSnackbarSeverity] = useState<SNACKBAR_STATUSES>(
     SNACKBAR_STATUSES.INFO
   );
+  const navigate = useNavigate();
+
   const showSnackbar = (message: string, severity: SNACKBAR_STATUSES): void => {
     setSnackbarSeverity(severity);
     setSnackbarMessage(message);
     toggleSnackbar(true);
   };
+
   const dispatch = useAppDispatch();
   const { productId: initialProductId } = useParams();
   const productId = initialProductId !== undefined ? initialProductId : "";
+
   useEffect(() => {
     const getProductToUpdate = async (): Promise<void> => {
       // Type guard to check if the payload is a StripeProduct
@@ -81,6 +97,7 @@ function ManageProductPage(): JSX.Element {
               setPriceToUpdate(priceResponse.payload.price);
               updateFormData(formData);
               setProductToUpdate(payload.product);
+              return;
             }
           }
         } else {
@@ -93,6 +110,7 @@ function ManageProductPage(): JSX.Element {
     };
     void getProductToUpdate();
   }, [dispatch, productId]);
+
   const handleFormUpdate = <K extends keyof ProductFormData>(
     key: K,
     value: ProductFormData[K]
@@ -101,6 +119,7 @@ function ManageProductPage(): JSX.Element {
     copyOfState[key] = value;
     updateFormData(copyOfState);
   };
+
   const isStripeProduct = (
     payload: unknown
   ): payload is StripeProductResponse => {
@@ -108,19 +127,77 @@ function ManageProductPage(): JSX.Element {
       typeof payload === "object" && payload !== null && "product" in payload
     );
   };
+
   const isStripePrice = (payload: unknown): payload is StripePriceResponse => {
     return (
       typeof payload === "object" && payload !== null && "price" in payload
     );
   };
+
+  const removeExistingImage = (image: string): void => {
+    if (formData !== undefined) {
+      const copyOfState = JSON.parse(JSON.stringify(formData))
+      const imageIndex = formData?.images.findIndex((img) => img === image);
+      if (imageIndex > -1) {
+        copyOfState.images.splice(imageIndex, 1);
+      }
+      updateFormData(copyOfState);
+    }
+  };
+
   const isPriceUpdated = priceToUpdate?.unit_amount !== formData?.unitAmount;
   const isCategoryUpdated =
     formData?.category !== productToUpdate?.metadata.category;
   const isNameUpdated = formData?.productName !== productToUpdate?.name;
+  const isImagesUpdated = formData?.images.length !== productToUpdate?.images.length;
   const isReady =
-    isPriceUpdated ||
-    isNameUpdated ||
-    isCategoryUpdated
+    isPriceUpdated || isNameUpdated || isCategoryUpdated || isImagesUpdated;
+  const handleUpdateProduct = async (): Promise<void> => {
+    if (!productToUpdate || !formData || !priceToUpdate) return;
+
+    const updateProductInput: UpdateProductInput = {
+      productId: productToUpdate.id,
+      ...(isCategoryUpdated && { category: formData.category }),
+      ...(isNameUpdated && { productName: formData.productName }),
+      ...(isImagesUpdated && { images: formData.images }),
+    };
+
+    const updatePriceInput: UpdatePriceInput = {
+      priceId: priceToUpdate.id,
+      productId: productToUpdate.id,
+      unitAmount: formData.unitAmount,
+    };
+
+    const shouldUpdateProduct =
+      isCategoryUpdated || isNameUpdated || isImagesUpdated;
+    const shouldUpdatePrice = isPriceUpdated;
+
+    if (shouldUpdateProduct) {
+      const productResponse: DefaultAxiosResponse = await dispatch(
+        updateProduct(updateProductInput)
+      );
+      if (productResponse.type !== `${UPDATE_PRODUCT}/fulfilled`) {
+        showSnackbar("Unable to update product", SNACKBAR_STATUSES.ERROR);
+        return;
+      }
+    }
+
+    if (shouldUpdatePrice) {
+      const priceResponse: DefaultAxiosResponse = await dispatch(
+        updatePrice(updatePriceInput)
+      );
+      if (priceResponse.type !== `${UPDATE_PRICE}/fulfilled`) {
+        showSnackbar("Unable to update price", SNACKBAR_STATUSES.ERROR);
+        return;
+      }
+    }
+
+    showSnackbar("Successfully updated!", SNACKBAR_STATUSES.SUCCESS);
+    navigate("/dashboard");
+  };
+  const handleUpdateProductClick = (): void => {
+    void handleUpdateProduct().then().catch();
+  };
 
   const content = (): JSX.Element => {
     if (isLoading) {
@@ -138,11 +215,17 @@ function ManageProductPage(): JSX.Element {
           </section>
           <ProductForm
             data={formData}
+            removeExistingImage={removeExistingImage}
             handleFormUpdate={handleFormUpdate}
             imagesToUpload={imagesToUpload}
             updateImagesToUpload={updateImagesToUpload}
           />
-          <Button variant="contained" disabled={!isReady} color="success">
+          <Button
+            onClick={handleUpdateProductClick}
+            variant="contained"
+            disabled={!isReady}
+            color="success"
+          >
             Save Changes
           </Button>
         </div>
@@ -150,6 +233,7 @@ function ManageProductPage(): JSX.Element {
     }
     return <ErrorPage />;
   };
+
   return (
     <div>
       {content()}

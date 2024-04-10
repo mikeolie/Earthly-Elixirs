@@ -15,6 +15,7 @@ import capitalize from "../../helpers/capitalize";
 
 interface ProductFormProps {
   data: ProductFormData;
+  removeExistingImage: (image: string) => void;
   handleFormUpdate: (
     key: keyof ProductFormData,
     value: string | ImageState[]
@@ -28,6 +29,7 @@ function ProductForm({
   handleFormUpdate,
   imagesToUpload,
   updateImagesToUpload,
+  removeExistingImage,
 }: ProductFormProps): JSX.Element {
   const [formattedUnitAmount, setFormattedUnitAmount] = useState<string>(
     (data.unitAmount / 100).toFixed(2) // Convert from cents to dollars
@@ -92,6 +94,8 @@ function ProductForm({
       </article>
       <article>
         <ImageUploader
+          removeExistingImage={removeExistingImage}
+          existingImages={data.images}
           imagesToUpload={imagesToUpload}
           handleUpdateImages={updateImagesToUpload}
         />
