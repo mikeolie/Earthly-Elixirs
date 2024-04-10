@@ -23,3 +23,7 @@
 .secondary-font {
   font-family: "Montserrat";
 }
+
+.splash-page {
+  min-height: 100vh;
+}

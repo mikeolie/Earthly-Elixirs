@@ -2,12 +2,15 @@ import { type ActionReducerMapBuilder, createSlice } from "@reduxjs/toolkit";
 import { REDUX_STATES, StripeProduct } from "../@types";
 import {
   clearAdminProducts,
+  clearProducts,
   deleteProduct,
   getAdminProducts,
+  getProducts,
 } from "../actions/products";
 
 interface PRODUCTS_INITIAL_STATE {
   adminProducts: StripeProduct[];
+  products: StripeProduct[];
   status: REDUX_STATES;
   error: null;
   dashboardProducts: StripeProduct[];
@@ -15,6 +18,7 @@ interface PRODUCTS_INITIAL_STATE {
 
 const initialState: PRODUCTS_INITIAL_STATE = {
   adminProducts: [],
+  products: [],
   dashboardProducts: [],
   status: REDUX_STATES.IDLE,
   error: null,
@@ -31,8 +35,20 @@ const productsSlice = createSlice({
       state.error = null;
       return state;
     });
+    builder.addCase(getProducts.fulfilled, (state, action) => {
+      state.products = action.payload.products;
+      state.status = REDUX_STATES.SUCCEEDED;
+      state.error = null;
+      return state;
+    });
     builder.addCase(clearAdminProducts.fulfilled, (state) => {
       state.adminProducts = [];
+      state.status = REDUX_STATES.IDLE;
+      state.error = null;
+      return state;
+    });
+    builder.addCase(clearProducts.fulfilled, (state) => {
+      state.products = [];
       state.status = REDUX_STATES.IDLE;
       state.error = null;
       return state;

@@ -33,3 +33,5 @@ export const imageTypes = [
   'image/x-xpixmap',
   'image/x-xwindowdump',
 ];
+
+export const HOME_CATEGORY_KEY = 'category'
