@@ -35,3 +35,4 @@ export const imageTypes = [
 ];
 
 export const HOME_CATEGORY_KEY = 'category'
+export const DEFAULT_CATEGORY = "All"

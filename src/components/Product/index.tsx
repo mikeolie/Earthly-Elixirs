@@ -16,7 +16,10 @@ function Product({ data }: ProductProps): JSX.Element {
     : "Price not found";
   const productName = data.name;
   const imgToShow = data.images[0];
-  const category = capitalize(data.metadata.category)
+  const category =
+    data.metadata.category && data.metadata.category.length > 0
+      ? capitalize(data.metadata.category)
+      : "";
   return (
     <article className="flex flex-col items-center justify-center w-48">
       <figure className="w-full h-32">

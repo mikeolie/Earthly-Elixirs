@@ -3,7 +3,7 @@ import axios, { type AxiosResponse } from "axios";
 import baseUrl from "../config/baseUrl";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { CreateProductInput, UpdateProductInput } from "../@types";
-import { HOME_CATEGORY_KEY } from "../constants";
+import { DEFAULT_CATEGORY, HOME_CATEGORY_KEY } from "../constants";
 
 const url = `${baseUrl}/products`;
 
@@ -25,15 +25,11 @@ export const getProducts = createAsyncThunk(
   GET_PRODUCTS,
   async (_, { rejectWithValue }) => {
     try {
-      const category = localStorage.getItem(HOME_CATEGORY_KEY)
-      // Set your custom headers
-      const headers = {
-        'Content-Type': 'application/json',
-        'category': category || '', // Set category header
-      };
+      const category = localStorage.getItem(HOME_CATEGORY_KEY) || DEFAULT_CATEGORY;
+      const getProductsUrl = `${url}/home?category=${category}`
 
-      const res: AxiosResponse = await axios.get(url, { headers })
-      return res.data
+      const res: AxiosResponse = await axios.get(getProductsUrl);
+      return res.data;
     } catch (err) {
       return rejectWithValue({ data: err });
     }
@@ -41,10 +37,7 @@ export const getProducts = createAsyncThunk(
 );
 
 export const CLEAR_PRODUCTS = "CLEAR_PRODUCTS";
-export const clearProducts = createAsyncThunk(
-  CLEAR_PRODUCTS,
-  async () => {}
-);
+export const clearProducts = createAsyncThunk(CLEAR_PRODUCTS, async () => {});
 
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
 export const createProduct = createAsyncThunk(

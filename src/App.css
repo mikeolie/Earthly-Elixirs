@@ -25,5 +25,74 @@
 }
 
 .splash-page {
-  min-height: 100vh;
+  background: url("src/assets/splash-bg.png") center no-repeat fixed;
+  background-size: cover; /* Ensure the image covers the entire background area */
+  background-position: center left; /* Center the background image */
+  height: 100vh;
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  z-index: 3;
+}
+
+.splash-page::after {
+  content: "";
+  background: url("src/assets/splash-bg.png") center no-repeat;
+  background-size: 200px 200px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  opacity: 0.9;
+  z-index: -1;
+}
+
+.splash-page__text {
+  font-style: normal;
+  font-weight: 800;
+
+  color: #586716;
+
+  text-shadow: 0px 4px 4px rgba(81, 88, 14, 0.25);
+}
+
+.shop-button {
+  position: relative;
+  border: 2px solid #906246; /* Border color */
+  background-color: transparent; /* Transparent background */
+  color: #906246; /* Text color */
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px; /* Adjust font size as needed */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  overflow: hidden;
+}
+
+.shop-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(to right, #d7a789, #906246);
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.shop-button:hover span {
+  position: relative;
+  color: white;
+  z-index: 1;
+}
+
+.shop-button span {
+  /* SHOP */
+
+  font-style: normal;
+  font-weight: 800;
+  /* identical to box height */
+}
+
+.shop-button:hover::before {
+  width: 100%;
 }
