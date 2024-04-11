@@ -21,7 +21,10 @@ function Product({ data }: ProductProps): JSX.Element {
       ? capitalize(data.metadata.category)
       : "";
   return (
-    <article className="flex flex-col items-center justify-center w-48">
+    <article
+      className="flex flex-col items-center justify-center mb-4 w-full px-4"
+      style={{ flex: "50%" }}
+    >
       <figure className="w-full h-32">
         <img
           src={imgToShow}
@@ -29,9 +32,9 @@ function Product({ data }: ProductProps): JSX.Element {
           alt={productName}
         />
       </figure>
-      <h4>{productName}</h4>
-      <h5>{price}</h5>
-      <h6>{category}</h6>
+      <h4 className="main-font">{productName}</h4>
+      <h5 className="main-font">{price}</h5>
+      <h6 className="secondary-font">{category}</h6>
     </article>
   );
 }

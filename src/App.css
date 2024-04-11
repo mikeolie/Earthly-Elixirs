@@ -37,14 +37,16 @@
 
 .splash-page::after {
   content: "";
-  background: url("src/assets/splash-bg.png") center no-repeat;
-  background-size: 200px 200px;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  top: 0;
-  opacity: 0.9;
-  z-index: -1;
+  height: 150px; /* Adjust the height of the vignette as needed */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
 }
 
 .splash-page__text {
@@ -95,4 +97,22 @@
 
 .shop-button:hover::before {
   width: 100%;
+}
+
+.category {
+  border: 1.2px solid black;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.category:hover {
+  color: white;
+  background-color: #19c463;
+  border: 1px solid #19c463;
+}
+
+.category--selected {
+  color: white;
+  background-color: #19c463;
+  border: 1px solid #19c463;
 }

@@ -57,6 +57,7 @@ export enum REDUX_STATES {
 }
 
 export enum PRODUCT_CATEGORY {
+  ALL = "All",
   TOPICALS = "topicals",
   GUMMIES = "gummies",
   TINCTURES = "tinctures",
